@@ -24,6 +24,12 @@ int main(void) {
     uint8_t keys[176], cipher[16], recovered[16];
 
     aes_key_expand(key, keys);
+    const uint8_t expected_k1[16] = {
+    0xdc,0x90,0x37,0xb0,0x9b,0x49,0xdf,0xe9,
+    0x97,0xfe,0x72,0x3f,0x38,0x81,0x15,0xa7
+};
+int key_ok = memcmp(keys + 16, expected_k1, 16) == 0;
+printf("Kiem tra khoa vong 1: %s\n", key_ok ? "PASS" : "FAIL");
     puts("MA HOA");
     aes_encrypt(plain, cipher, keys, 1);
     puts("\nGIAI MA");
@@ -40,5 +46,5 @@ int main(void) {
     int dec_ok = memcmp(recovered, plain, 16) == 0;
     printf("Ma hoa: %s\n", enc_ok ? "PASS" : "FAIL");
     printf("Giai ma: %s\n", dec_ok ? "PASS" : "FAIL");
-    return enc_ok && dec_ok ? 0 : 1;
+    return key_ok && enc_ok && dec_ok ? 0 : 1;
 }
