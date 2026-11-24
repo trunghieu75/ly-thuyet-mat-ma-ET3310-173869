@@ -8,6 +8,10 @@ int main(void) {
     uint64_t expected = UINT64_C(0x85E813540F0AB405);
     uint64_t keys[16];
     des_key_schedule(key, keys);
+    int keys_ok = keys[0] == UINT64_C(0x1B02EFFC7072)&& keys[15] == UINT64_C(0xCB3D8B0E17F5);
+    printf("K1 : %012" PRIX64 "\n", keys[0]);
+    printf("K16: %012" PRIX64 "\n", keys[15]);
+    printf("Kiem tra khoa con: %s\n", keys_ok ? "PASS" : "FAIL");
     printf("MA HOA\n");
     uint64_t cipher = des_encrypt(plain, keys, 1);
     printf("\nGIAI MA\n");
@@ -17,7 +21,7 @@ int main(void) {
     printf("Expected  : %016" PRIX64 "\n", expected);
     printf("Ciphertext: %016" PRIX64 "\n", cipher);
     printf("Recovered : %016" PRIX64 "\n", recovered);
-    int ok = cipher == expected && recovered == plain;
+    int ok = keys_ok && cipher == expected && recovered == plain;
     printf("Test: %s\n", ok ? "PASS" : "FAIL");
     return ok ? 0 : 1;
 }
